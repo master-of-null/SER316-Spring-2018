@@ -51,6 +51,11 @@ import main.java.memoranda.*;
 import main.java.memoranda.date.CalendarDate;
 import main.java.memoranda.date.CurrentDate;
 import main.java.memoranda.date.DateListener;
+import main.java.memoranda.interfaces.INoteList;
+import main.java.memoranda.interfaces.IProject;
+import main.java.memoranda.interfaces.IProjectListener;
+import main.java.memoranda.interfaces.IResourcesList;
+import main.java.memoranda.interfaces.ITaskList;
 import main.java.memoranda.ui.treetable.*;
 import main.java.memoranda.util.*;
 
@@ -108,9 +113,9 @@ public class TaskTable extends JTable {
                 tableChanged();
             }
         });
-        CurrentProject.addProjectListener(new ProjectListener() {
-            public void projectChange(Project p, NoteList nl, TaskList tl,
-                    ResourcesList rl) {
+        CurrentProject.addProjectListener(new IProjectListener() {
+            public void projectChange(IProject p, INoteList nl, ITaskList tl,
+                    IResourcesList rl) {
             }
 
             public void projectWasChanged() {
@@ -230,6 +235,13 @@ public class TaskTable extends JTable {
         return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1
                 : editingRow;
     }
+    
+    // START TASK 2-2 SMELL BETWEEN CLASSES
+    public String getParentTaskId() {
+        String parentTaskId = this.getModel().getValueAt(this.getSelectedRow(), TaskTable.TASK_ID).toString();
+        return parentTaskId;
+    }
+    // END TASK 2-2 SMELL BETWEEN CLASSES
 
     /**
      * Overridden to pass the new rowHeight to the tree.
